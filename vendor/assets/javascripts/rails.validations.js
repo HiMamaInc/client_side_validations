@@ -45,11 +45,15 @@
 
   validatorsFor = function(name, validators) {
     var captures, validator, validator_name;
+    if (validators.hasOwnProperty(name)) {
+      return validators[name];
+    }
+    name = name.replace(/\[(\w+_attributes)\]\[[\da-z_]+\](?=\[(?:\w+_attributes)\])/g, '[$1][]');
     if (captures = name.match(/\[(\w+_attributes)\].*\[(\w+)\]$/)) {
       for (validator_name in validators) {
         validator = validators[validator_name];
         if (validator_name.match("\\[" + captures[1] + "\\].*\\[\\]\\[" + captures[2] + "\\]$")) {
-          name = name.replace(/\[[\da-z_]+\]\[(\w+)\]$/g, "[][$1]");
+          name = name.replace(/\[[\da-z_]+\]\[(\w+)\]$/g, '[][$1]');
         }
       }
     }
